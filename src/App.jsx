@@ -8,6 +8,7 @@ import ChannelPage from './ChannelPage';
 import LibraryPage from './LibraryPage';
 import TrendingPage from './TrendingPage';
 import AuthPage from './Auth';
+import {Toaster} from 'react-hot-toast'
 
 
 
@@ -33,6 +34,7 @@ const NotFoundPage = () => {
 function App() {
   return (
     <Router>
+      <Toaster/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/video/:videoId" element={<VideoPage />} />
