@@ -1,3 +1,6 @@
+
+
+
 // import React, { useState, useEffect } from "react";
 // import { Link, useParams, useNavigate } from "react-router-dom";
 // import Header from "./Header";
@@ -116,9 +119,41 @@
 //           : [];
 //         const isSubscribed = subscribers.some((sub) => sub?.id == userId);
 //         setSubscribed(isSubscribed);
+        
+//         // Update total subscriber count
+//         setVideoStats(prev => ({
+//           ...prev,
+//           totalSubscriber: parseInt(channelData.totalSubscriber) || 0
+//         }));
 //       }
 //     } catch (err) {
 //       console.error("Error checking subscription:", err);
+//     }
+//   };
+
+//   // Fetch uploadedBy user profile from user table
+//   const fetchUploadedByUserProfile = async () => {
+//     if (!uploadedByUser || !uploadedByUser.id) return;
+    
+//     try {
+//       const response = await fetch(
+//         `http://localhost/youtube-clone-backend/api/user/getProfile.php?userId=${uploadedByUser.id}`,
+//       );
+//       const result = await response.json();
+
+//       if (result.success) {
+//         const userData = result.data;
+//         // Update uploadedByUser with fresh data from users table
+//         setUploadedByUser(userData);
+        
+//         // Update total subscriber count
+//         setVideoStats(prev => ({
+//           ...prev,
+//           totalSubscriber: parseInt(userData.totalSubscriber) || 0
+//         }));
+//       }
+//     } catch (err) {
+//       console.error("Error fetching uploadedBy user profile:", err);
 //     }
 //   };
 
@@ -182,6 +217,133 @@
 //     }
 //   };
 
+//   // // Handle like
+//   // const handleLike = async () => {
+//   //   if (!currentUser) {
+//   //     alert("Please login to like videos");
+//   //     navigate("/login");
+//   //     return;
+//   //   }
+
+//   //   // Optimistic update
+//   //   if (liked) {
+//   //     setVideoStats((prev) => ({
+//   //       ...prev,
+//   //       likes: Math.max(0, prev.likes - 1),
+//   //     }));
+//   //     setLiked(false);
+//   //   } else {
+//   //     setVideoStats((prev) => ({
+//   //       ...prev,
+//   //       likes: prev.likes + 1,
+//   //     }));
+//   //     setLiked(true);
+
+//   //     if (disliked) {
+//   //       setVideoStats((prev) => ({
+//   //         ...prev,
+//   //         dislikes: Math.max(0, prev.dislikes - 1),
+//   //       }));
+//   //       setDisliked(false);
+//   //     }
+//   //   }
+
+//   //   try {
+//   //     const response = await fetch(
+//   //       "http://localhost/youtube-clone-backend/api/video/like.php",
+//   //       {
+//   //         method: "POST",
+//   //         headers: {
+//   //           "Content-Type": "application/json",
+//   //         },
+//   //         body: JSON.stringify({
+//   //           videoId: id,
+//   //           user: {
+//   //             id: currentUser.id,
+//   //             name: currentUser.name,
+//   //             email: currentUser.email,
+//   //             channelName: currentUser.channelName,
+//   //           },
+//   //         }),
+//   //       },
+//   //     );
+
+//   //     const result = await response.json();
+
+//   //     if (!result.success) {
+//   //       // Revert optimistic update if failed
+//   //       fetchVideo();
+//   //     }
+//   //   } catch (err) {
+//   //     console.error("Error liking video:", err);
+//   //     fetchVideo(); // Revert to server state
+//   //   }
+//   // };
+
+//   // // Handle dislike
+//   // const handleDislike = async () => {
+//   //   if (!currentUser) {
+//   //     alert("Please login to dislike videos");
+//   //     navigate("/login");
+//   //     return;
+//   //   }
+
+//   //   // Optimistic update
+//   //   if (disliked) {
+//   //     setVideoStats((prev) => ({
+//   //       ...prev,
+//   //       dislikes: Math.max(0, prev.dislikes - 1),
+//   //     }));
+//   //     setDisliked(false);
+//   //   } else {
+//   //     setVideoStats((prev) => ({
+//   //       ...prev,
+//   //       dislikes: prev.dislikes + 1,
+//   //     }));
+//   //     setDisliked(true);
+
+//   //     if (liked) {
+//   //       setVideoStats((prev) => ({
+//   //         ...prev,
+//   //         likes: Math.max(0, prev.likes - 1),
+//   //       }));
+//   //       setLiked(false);
+//   //     }
+//   //   }
+
+//   //   try {
+//   //     const response = await fetch(
+//   //       "http://localhost/youtube-clone-backend/api/video/dislike.php",
+//   //       {
+//   //         method: "POST",
+//   //         headers: {
+//   //           "Content-Type": "application/json",
+//   //         },
+//   //         body: JSON.stringify({
+//   //           videoId: id,
+//   //           user: {
+//   //             id: currentUser.id,
+//   //             name: currentUser.name,
+//   //             email: currentUser.email,
+//   //             channelName: currentUser.channelName,
+//   //           },
+//   //         }),
+//   //       },
+//   //     );
+
+//   //     const result = await response.json();
+
+//   //     if (!result.success) {
+//   //       // Revert optimistic update if failed
+//   //       fetchVideo();
+//   //     }
+//   //   } catch (err) {
+//   //     console.error("Error disliking video:", err);
+//   //     fetchVideo(); // Revert to server state
+//   //   }
+//   // };
+
+  
 //   // Handle like
 //   const handleLike = async () => {
 //     if (!currentUser) {
@@ -361,6 +523,7 @@
 //     }
 //   };
 
+
 //   // Handle subscribe
 //   const handleSubscribe = async () => {
 //     if (!currentUser) {
@@ -370,6 +533,23 @@
 //     }
 
 //     if (!uploadedByUser) return;
+
+//     // Optimistic update
+//     if (subscribed) {
+//       // Unsubscribe
+//       setVideoStats((prev) => ({
+//         ...prev,
+//         totalSubscriber: Math.max(0, prev.totalSubscriber - 1),
+//       }));
+//       setSubscribed(false);
+//     } else {
+//       // Subscribe
+//       setVideoStats((prev) => ({
+//         ...prev,
+//         totalSubscriber: prev.totalSubscriber + 1,
+//       }));
+//       setSubscribed(true);
+//     }
 
 //     try {
 //       const response = await fetch(
@@ -394,39 +574,29 @@
 //       const result = await response.json();
 
 //       if (result.success) {
-//         // Update local state immediately for better UX
-//         if (subscribed) {
-//           // Unsubscribe
-//           setVideoStats((prev) => ({
-//             ...prev,
-//             totalSubscriber: Math.max(0, prev.totalSubscriber - 1),
-//           }));
-//           setSubscribed(false);
-//           alert(
-//             `Unsubscribed from ${uploadedByUser.channelName || uploadedByUser.name}`,
-//           );
-//         } else {
-//           // Subscribe
-//           setVideoStats((prev) => ({
-//             ...prev,
-//             totalSubscriber: prev.totalSubscriber + 1,
-//           }));
-//           setSubscribed(true);
-//           alert(
-//             `Subscribed to ${uploadedByUser.channelName || uploadedByUser.name}`,
-//           );
-//         }
-
-//         // Refresh user data to sync with server
-//         if (uploadedByUser.id) {
-//           setTimeout(
-//             () => checkSubscriptionStatus(uploadedByUser.id, currentUser.id),
-//             100,
-//           );
-//         }
+//         // Update with actual server data
+//         setVideoStats((prev) => ({
+//           ...prev,
+//           totalSubscriber: parseInt(result.totalSubscriber) || prev.totalSubscriber,
+//         }));
+        
+//         // Update subscription status
+//         setSubscribed(result.action === "subscribed");
+        
+//         // Refresh uploadedBy user data
+//         fetchUploadedByUserProfile();
+        
+//         // alert(
+//         //   `${result.action === "subscribed" ? "Subscribed to" : "Unsubscribed from"} ${uploadedByUser.channelName || uploadedByUser.name}`,
+//         // );
+//       } else {
+//         // Revert optimistic update if failed
+//         checkSubscriptionStatus(uploadedByUser.id, currentUser.id);
 //       }
 //     } catch (err) {
 //       console.error("Error subscribing:", err);
+//       // Revert optimistic update on error
+//       checkSubscriptionStatus(uploadedByUser.id, currentUser.id);
 //     }
 //   };
 
@@ -554,6 +724,13 @@
 //     ]);
 //   }, [id]);
 
+//   // Fetch uploadedBy user profile when uploadedByUser changes
+//   useEffect(() => {
+//     if (uploadedByUser && uploadedByUser.id) {
+//       fetchUploadedByUserProfile();
+//     }
+//   }, [uploadedByUser]);
+
 //   if (loading) {
 //     return (
 //       <div className="flex flex-col min-h-screen bg-gray-50">
@@ -671,15 +848,6 @@
 //                 </button>
 //               </div>
 //             </div>
-
-//             {/* Video description */}
-//             {/* {video.description && (
-//               <div className="bg-gray-50 p-4 rounded-lg mb-6">
-//                 <p className="text-gray-700 whitespace-pre-line">
-//                   {video.description}
-//                 </p>
-//               </div>
-//             )} */}
 //           </div>
 
 //           {/* Channel info and subscribe */}
@@ -863,7 +1031,7 @@
 //   );
 // };
 
-// export default VideoPage;
+// export default VideoPage; 
 
 
 import React, { useState, useEffect } from "react";
@@ -884,6 +1052,7 @@ const VideoPage = () => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [savedToWatchLater, setSavedToWatchLater] = useState(false);
   const [videoStats, setVideoStats] = useState({
     likes: 0,
     dislikes: 0,
@@ -899,6 +1068,114 @@ const VideoPage = () => {
     }
     return null;
   };
+
+  // ============== LOCAL STORAGE FUNCTIONS ==============
+
+  // Save to History
+  const saveToHistory = (videoData) => {
+    if (!videoData) return;
+    
+    const history = JSON.parse(localStorage.getItem("watchHistory") || "[]");
+    
+    // Remove if already exists
+    const filteredHistory = history.filter(item => item.id !== videoData.id);
+    
+    // Add to beginning
+    const videoInfo = {
+      id: videoData.id,
+      title: videoData.title,
+      channel: videoData.uploadedBy?.channelName || videoData.uploadedBy?.name || "Unknown",
+      thumbnail: `https://picsum.photos/320/180?random=${videoData.id}`,
+      channelImg: `https://picsum.photos/36/36?random=${videoData.id + 100}`,
+      duration: "10:00", // Default duration
+      views: formatViews(videoData.totalViews),
+      time: "Now",
+      watchedAt: new Date().toISOString(),
+      videoUrl: videoData.videoUrl
+    };
+    
+    filteredHistory.unshift(videoInfo);
+    
+    // Keep only last 100 videos
+    const limitedHistory = filteredHistory.slice(0, 100);
+    localStorage.setItem("watchHistory", JSON.stringify(limitedHistory));
+  };
+
+  // Save to Liked Videos
+  const saveToLikedVideos = (videoData) => {
+    if (!videoData) return;
+    
+    const likedVideos = JSON.parse(localStorage.getItem("likedVideos") || "[]");
+    
+    // Check if already liked
+    const alreadyLiked = likedVideos.some(item => item.id === videoData.id);
+    
+    if (alreadyLiked) {
+      // Remove from liked videos (if unliking)
+      const updatedLikedVideos = likedVideos.filter(item => item.id !== videoData.id);
+      localStorage.setItem("likedVideos", JSON.stringify(updatedLikedVideos));
+    } else {
+      // Add to liked videos
+      const videoInfo = {
+        id: videoData.id,
+        title: videoData.title,
+        channel: videoData.uploadedBy?.channelName || videoData.uploadedBy?.name || "Unknown",
+        thumbnail: `https://picsum.photos/320/180?random=${videoData.id}`,
+        channelImg: `https://picsum.photos/36/36?random=${videoData.id + 100}`,
+        duration: "10:00",
+        views: formatViews(videoData.totalViews),
+        time: formatTimeAgo(videoData.createdAt),
+        likedAt: new Date().toISOString(),
+        videoUrl: videoData.videoUrl
+      };
+      
+      likedVideos.unshift(videoInfo);
+      localStorage.setItem("likedVideos", JSON.stringify(likedVideos));
+    }
+  };
+
+  // Save to Watch Later
+  const saveToWatchLater = (videoData) => {
+    if (!videoData) return;
+    
+    const watchLater = JSON.parse(localStorage.getItem("watchLater") || "[]");
+    
+    if (savedToWatchLater) {
+      // Remove from watch later
+      const updatedWatchLater = watchLater.filter(item => item.id !== videoData.id);
+      localStorage.setItem("watchLater", JSON.stringify(updatedWatchLater));
+      setSavedToWatchLater(false);
+      alert("Removed from Watch Later");
+    } else {
+      // Add to watch later
+      const videoInfo = {
+        id: videoData.id,
+        title: videoData.title,
+        channel: videoData.uploadedBy?.channelName || videoData.uploadedBy?.name || "Unknown",
+        thumbnail: `https://picsum.photos/320/180?random=${videoData.id}`,
+        channelImg: `https://picsum.photos/36/36?random=${videoData.id + 100}`,
+        duration: "10:00",
+        views: formatViews(videoData.totalViews),
+        time: formatTimeAgo(videoData.createdAt),
+        savedAt: new Date().toISOString(),
+        videoUrl: videoData.videoUrl
+      };
+      
+      watchLater.unshift(videoInfo);
+      localStorage.setItem("watchLater", JSON.stringify(watchLater));
+      setSavedToWatchLater(true);
+      // alert("Added to Watch Later");
+    }
+  };
+
+  // Check if video is in Watch Later
+  const checkWatchLaterStatus = (videoId) => {
+    const watchLater = JSON.parse(localStorage.getItem("watchLater") || "[]");
+    const isSaved = watchLater.some(item => item.id == videoId);
+    setSavedToWatchLater(isSaved);
+  };
+
+  // ============== EXISTING CODE ==============
 
   // Fetch video by ID
   const fetchVideo = async () => {
@@ -917,6 +1194,12 @@ const VideoPage = () => {
       if (result.success) {
         const videoData = result.data;
         setVideo(videoData);
+
+        // Save to history
+        saveToHistory(videoData);
+
+        // Check watch later status
+        checkWatchLaterStatus(videoData.id);
 
         // Parse uploadedBy data
         const uploadedBy = videoData.uploadedBy || {};
@@ -1082,133 +1365,6 @@ const VideoPage = () => {
     }
   };
 
-  // // Handle like
-  // const handleLike = async () => {
-  //   if (!currentUser) {
-  //     alert("Please login to like videos");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   // Optimistic update
-  //   if (liked) {
-  //     setVideoStats((prev) => ({
-  //       ...prev,
-  //       likes: Math.max(0, prev.likes - 1),
-  //     }));
-  //     setLiked(false);
-  //   } else {
-  //     setVideoStats((prev) => ({
-  //       ...prev,
-  //       likes: prev.likes + 1,
-  //     }));
-  //     setLiked(true);
-
-  //     if (disliked) {
-  //       setVideoStats((prev) => ({
-  //         ...prev,
-  //         dislikes: Math.max(0, prev.dislikes - 1),
-  //       }));
-  //       setDisliked(false);
-  //     }
-  //   }
-
-  //   try {
-  //     const response = await fetch(
-  //       "http://localhost/youtube-clone-backend/api/video/like.php",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           videoId: id,
-  //           user: {
-  //             id: currentUser.id,
-  //             name: currentUser.name,
-  //             email: currentUser.email,
-  //             channelName: currentUser.channelName,
-  //           },
-  //         }),
-  //       },
-  //     );
-
-  //     const result = await response.json();
-
-  //     if (!result.success) {
-  //       // Revert optimistic update if failed
-  //       fetchVideo();
-  //     }
-  //   } catch (err) {
-  //     console.error("Error liking video:", err);
-  //     fetchVideo(); // Revert to server state
-  //   }
-  // };
-
-  // // Handle dislike
-  // const handleDislike = async () => {
-  //   if (!currentUser) {
-  //     alert("Please login to dislike videos");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   // Optimistic update
-  //   if (disliked) {
-  //     setVideoStats((prev) => ({
-  //       ...prev,
-  //       dislikes: Math.max(0, prev.dislikes - 1),
-  //     }));
-  //     setDisliked(false);
-  //   } else {
-  //     setVideoStats((prev) => ({
-  //       ...prev,
-  //       dislikes: prev.dislikes + 1,
-  //     }));
-  //     setDisliked(true);
-
-  //     if (liked) {
-  //       setVideoStats((prev) => ({
-  //         ...prev,
-  //         likes: Math.max(0, prev.likes - 1),
-  //       }));
-  //       setLiked(false);
-  //     }
-  //   }
-
-  //   try {
-  //     const response = await fetch(
-  //       "http://localhost/youtube-clone-backend/api/video/dislike.php",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           videoId: id,
-  //           user: {
-  //             id: currentUser.id,
-  //             name: currentUser.name,
-  //             email: currentUser.email,
-  //             channelName: currentUser.channelName,
-  //           },
-  //         }),
-  //       },
-  //     );
-
-  //     const result = await response.json();
-
-  //     if (!result.success) {
-  //       // Revert optimistic update if failed
-  //       fetchVideo();
-  //     }
-  //   } catch (err) {
-  //     console.error("Error disliking video:", err);
-  //     fetchVideo(); // Revert to server state
-  //   }
-  // };
-
-  
   // Handle like
   const handleLike = async () => {
     if (!currentUser) {
@@ -1224,6 +1380,9 @@ const VideoPage = () => {
         likes: Math.max(0, prev.likes - 1),
       }));
       setLiked(false);
+      
+      // Remove from liked videos
+      saveToLikedVideos(video);
     } else {
       // Like
       setVideoStats((prev) => ({
@@ -1231,6 +1390,9 @@ const VideoPage = () => {
         likes: prev.likes + 1,
       }));
       setLiked(true);
+
+      // Add to liked videos
+      saveToLikedVideos(video);
 
       // Remove dislike if user had disliked
       if (disliked) {
@@ -1306,6 +1468,7 @@ const VideoPage = () => {
       navigate("/login");
       return;
     }
+    
     if (disliked) {
       // Remove dislike
       setVideoStats((prev) => ({
@@ -1328,6 +1491,9 @@ const VideoPage = () => {
           likes: Math.max(0, prev.likes - 1),
         }));
         setLiked(false);
+        
+        // Remove from liked videos when disliked
+        saveToLikedVideos(video);
       }
     }
 
@@ -1387,7 +1553,6 @@ const VideoPage = () => {
       console.error("Error disliking video:", err);
     }
   };
-
 
   // Handle subscribe
   const handleSubscribe = async () => {
@@ -1450,10 +1615,6 @@ const VideoPage = () => {
         
         // Refresh uploadedBy user data
         fetchUploadedByUserProfile();
-        
-        // alert(
-        //   `${result.action === "subscribed" ? "Subscribed to" : "Unsubscribed from"} ${uploadedByUser.channelName || uploadedByUser.name}`,
-        // );
       } else {
         // Revert optimistic update if failed
         checkSubscriptionStatus(uploadedByUser.id, currentUser.id);
@@ -1503,6 +1664,19 @@ const VideoPage = () => {
         return comment;
       }),
     );
+  };
+
+  // Handle watch later
+  const handleWatchLater = () => {
+    if (!currentUser) {
+      alert("Please login to save videos");
+      navigate("/login");
+      return;
+    }
+    
+    if (video) {
+      saveToWatchLater(video);
+    }
   };
 
   // Helper function to format views
@@ -1711,6 +1885,36 @@ const VideoPage = () => {
                   </svg>
                   <span>Dislike</span>
                 </button>
+
+                {/* Watch Later button */}
+                <button
+                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-full ${
+                    savedToWatchLater
+                      ? "bg-blue-50 text-blue-600"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                  onClick={handleWatchLater}
+                  title={savedToWatchLater ? "Remove from Watch Later" : "Save to Watch Later"}
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5">
+                    <path
+                      fill="currentColor"
+                      d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"
+                    ></path>
+                  </svg>
+                  <span>{savedToWatchLater ? "Saved" : "Watch Later"}</span>
+                </button>
+
+                {/* Share button */}
+                {/* <button className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 rounded-full text-gray-700">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5">
+                    <path
+                      fill="currentColor"
+                      d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"
+                    ></path>
+                  </svg>
+                  <span>Share</span>
+                </button> */}
               </div>
             </div>
           </div>
@@ -1896,4 +2100,4 @@ const VideoPage = () => {
   );
 };
 
-export default VideoPage; 
+export default VideoPage;
