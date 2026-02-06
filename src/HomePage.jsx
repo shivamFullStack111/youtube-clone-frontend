@@ -498,35 +498,7 @@ const HomePage = () => {
             </Link>
           </div>
 
-          <div className="py-6 border-b border-gray-200">
-            <h3 className="px-4 text-sm font-medium text-gray-500 mb-4">
-              SUBSCRIPTIONS
-            </h3>
-            <Link to={"/channel/gtfhbjrnk"}>
-              <SidebarItem
-                icon="https://picsum.photos/36/36?random=22"
-                text="WebDev Simplified"
-              />
-            </Link>
-            <Link to={"/channel/gtfhbjrnk"}>
-              <SidebarItem
-                icon="https://picsum.photos/36/36?random=23"
-                text="Tailwind Masters"
-              />
-            </Link>
-            <Link to={"/channel/gtfhbjrnk"}>
-              <SidebarItem
-                icon="https://picsum.photos/36/36?random=24"
-                text="JS Ninja"
-              />
-            </Link>
-            <Link to={"/channel/gtfhbjrnk"}>
-              <SidebarItem
-                icon="https://picsum.photos/36/36?random=25"
-                text="React Pro"
-              />
-            </Link>
-          </div>
+     
 
           <div className="py-6 border-b border-gray-200">
             <h3 className="px-4 text-sm font-medium text-gray-500 mb-4">
@@ -538,12 +510,12 @@ const HomePage = () => {
                 text="Liked videos"
               />
             </Link>
-            <Link to={"/library"}>
+            {/* <Link to={"/library"}>
               <SidebarItem
                 icon="M10 16.5l6-4.5-6-4.5v9zM17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"
                 text="Playlist"
               />
-            </Link>
+            </Link> */}
             <Link to={"/library"}>
               <SidebarItem
                 icon="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h18L14 6z"

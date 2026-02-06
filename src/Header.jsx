@@ -103,7 +103,9 @@ const Header = () => {
 
         {/* Profile → Auth */}
         <button
-          onClick={() => navigate("/channel/fhbjdnk")}
+          onClick={() =>
+            navigate(`/channel/${JSON.parse(localStorage.getItem("user")).id}`)
+          }
           className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white font-medium"
         >
           U
