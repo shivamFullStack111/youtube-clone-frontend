@@ -25,13 +25,13 @@
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
 //     setIsUploading(true);
-    
+
 //     // Simulate upload progress
 //     let progress = 0;
 //     const interval = setInterval(() => {
 //       progress += 5;
 //       setUploadProgress(progress);
-      
+
 //       if (progress >= 100) {
 //         clearInterval(interval);
 //         setIsUploading(false);
@@ -66,7 +66,7 @@
 //             <h2 className="text-2xl font-bold text-gray-800 mb-2">Upload Complete!</h2>
 //             <p className="text-gray-600 mb-6">Your video has been successfully published on PlayZone.</p>
 //             <div className="flex justify-center space-x-4">
-//               <button 
+//               <button
 //                 onClick={handleReset}
 //                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
 //               >
@@ -100,8 +100,8 @@
 //                 <span>{uploadProgress}%</span>
 //               </div>
 //               <div className="w-full bg-gray-200 rounded-full h-2.5">
-//                 <div 
-//                   className="bg-blue-600 h-2.5 rounded-full" 
+//                 <div
+//                   className="bg-blue-600 h-2.5 rounded-full"
 //                   style={{ width: `${uploadProgress}%` }}
 //                 ></div>
 //               </div>
@@ -179,7 +179,6 @@
 
 //             {/* Right Column - Settings */}
 //             <div className="space-y-6">
-            
 
 //               <div className="border border-gray-200 rounded-md p-4">
 //                 <h3 className="font-medium text-gray-800 mb-3">Category</h3>
@@ -205,9 +204,9 @@
 //                 <div className="border border-gray-200 rounded-md p-4">
 //                   <h3 className="font-medium text-gray-800 mb-3">Thumbnail Preview</h3>
 //                   <div className="aspect-video bg-gray-200 rounded-md overflow-hidden">
-//                     <img 
-//                       src={videoData.thumbnail} 
-//                       alt="Thumbnail preview" 
+//                     <img
+//                       src={videoData.thumbnail}
+//                       alt="Thumbnail preview"
 //                       className="w-full h-full object-cover"
 //                       onError={(e) => {
 //                         e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180' fill='%23cccccc'%3E%3Crect width='320' height='180' fill='%23f0f0f0'/%3E%3Cpath d='M120 70L100 90L80 70H60V110H80V90L100 110L120 90V110H140V70H120ZM180 110V90H160V70H200V90H180V110H160V90H180ZM240 70H220V110H240V90H260V110H280V90H260V70H240Z' fill='%23999999'/%3E%3C/svg%3E";
@@ -258,7 +257,7 @@ const UploadPage = () => {
     videoUrl: "",
     thumbnail: "",
     category: "education",
-    tags: ""
+    tags: "",
   });
 
   const [isUploading, setIsUploading] = useState(false);
@@ -286,27 +285,27 @@ const UploadPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost/youtube-clone-backend/api/videos/upload.php",
+        "http://localhost/youtube-clone-backend/api/video/uploadVideo.php",
         {
           ...videoData,
           uploadedBy: {
             id: user.id,
             name: user.name,
             email: user.email,
-            channelName: user.channelName
-          }
+            channelName: user.channelName,
+          },
         },
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           onUploadProgress: (progressEvent) => {
             const percent = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
+              (progressEvent.loaded * 100) / progressEvent.total,
             );
             setUploadProgress(percent);
-          }
-        }
+          },
+        },
       );
 
       if (res.data.success) {
@@ -396,6 +395,13 @@ const UploadPage = () => {
             <option value="gaming">Gaming</option>
             <option value="music">Music</option>
             <option value="technology">Technology</option>
+
+            <option value="live">Live</option>
+            <option value="coding">Coding</option>
+            <option value="react">React</option>
+            <option value="cooking">Cooking</option>
+            <option value="travel">Travel</option>
+            <option value="fitness">Fitness</option>
           </select>
 
           <div className="flex justify-end">
